@@ -12,13 +12,23 @@ class Rule:
         self._b = b
         self._c = c
 
-    def quadratic(self, a, b, c, t):
+    def quadratic(self, t):
+        a = self._a
+        b = self._b
+        c = self._c
         return a*t**2 + b*t + c
     
     def linear(self, t):
         a = self._a
         b = self._b
         return a*t + b
+    
+    def derivative(self, dt, deg = 1):
+        if deg == 1: 
+            return self._a * dt 
+        if deg == 2: 
+            return 2 * self._a * dt + self._b * dt
+
 
 class DataGenerator: 
     def __init__(self, w, rule: Rule):
@@ -88,7 +98,7 @@ class ModelComplex:
         #model estimation
         if self._state_id > 0: 
             dt = self._timeline[self._state_id] - self._timeline[self._state_id - 1]
-            self._estimation += self._generation_rule(dt)
+            self._estimation += self._generation_rule.derivative(dt, deg = 1)
         else: 
             dt = 0
 
